@@ -14,7 +14,7 @@
 - You can then click on "Hosted zones" and select your new domain name.
 - You now want to create a Record Set with Type A. You will then input your public IP that you get from the EC2 instance from Step 1 to the "Value" box. Save Record Set.
 - Next, you will create another Record Set but this time you want to create a CNAME type and put 'www' in front of the domaine "Name". For "Value" you will input your domain name (without the www).
-  - This will redirect the domain www.khanhsplan.com to simply khanhsplan.com.
+  - This will redirect the domain www\.khanhsplan.com to simply khanhsplan.com.
 
 ## Step 3. Secured website by utilizing SSL certificate with AWS Certificate Manager, ELB, and CloudFront CDN.
 
