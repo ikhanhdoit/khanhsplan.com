@@ -18,4 +18,23 @@
 
 ## Step 3. Secured website by utilizing SSL certificate with AWS Certificate Manager, ELB, and CloudFront CDN.
 
--
+- Go into AWS Certificate Manager and select "Request a Certificate".
+- Add the Domain names. I added 'ww<span>w.kh</span>anhsplan.com', 'khanhsplan.com', and '\*.khanhsplan.com'.
+- You can then choose the "Email validation" to select a validation method. Then confirm and request. A validation email will be sent to wherever you set up the domain in Step 2.
+- Once you approve from the email, your Validation status turned to "Success". You can now see your SSL/TLS certificate in "Certificate Manager".
+- Now go to EC2 for Load Balancer and Create Load Balancer. Choose Application Load Balancer.
+  - Choose a name, be sure it is "internet-facing" and IPv4. For your Listener Load Balancer Protocol, choose HTTP (80).
+    - As precaution, I also added the HTTPS (443) Listener to the Load Balancer.
+  - For "Certificate type", select "Choose a certificate from ACM (recommended)" and select the certificate that you created earlier in this Step.
+  - Select your Security Group that exposes HTTP and HTTPS.
+  - Select a New Target Group and input a name and you can leave the default protocols to HTTP (80) and choose "Instance" for target type and your VPC.
+- Now go into the CloudFront service and create a web distribution.
+  - Select your Load Balancer for your "Origin Domain Name". Also changed "Origin Protocol Policy" option to "Match Viewer".
+  - Change "Viewer Protocol Policy" to "Redirect HTTP to HTTPS" under Default Cache Behavior Settings.
+  - Input all 3 domain names under "Alternate Domain Names (CNAMEs) and change "SSL Certificate" to "Custom SSL Certificate (example.com)" and select your SSL Certificate from Certificate Manager.
+  - Now Click "Create Distribution" to finish this step. This step will take awhile before the distribution becomes completed.
+    - For a Dev environment, you can reduce the CloudFront TTL to a lower amount to see the changes. This helps as the default is 24 hours.
+    - Once everything is secured, you can increase the TTL to the default or higher cache time.
+- Return to Route 53 and update the A record sets with the CloudFront domain name
+  - Update both ww<span>w.kh</span>anhsplan.com and khanhsplan.com A record to match the CloudFront domain name, using the CNAME and A type respectively.
+  - You may not know when if this works completely until the next day. I would monitor and adjust accordingly as needed.
